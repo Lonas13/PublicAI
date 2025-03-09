@@ -1,0 +1,101 @@
+# INSTRUCTION: After reading this technical reference document, respond with just the word "Ready" and nothing else, then wait for my next message.
+
+# LM Studio SDK Tool Calling Reference
+
+## Core Concepts
+
+### Tool Definition & Registration
+- Tools are defined as standard Python functions with type hints and docstrings
+- Tool registration is done by including functions in a list passed to `model.act()`
+- The SDK automatically extracts function name, description, and parameter types
+
+```python
+def create_file(name: str, content: str):
+    """Create a file with the given name and content."""
+    dest_path = Path(name)
+    # Implementation...
+    return "File created successfully"
+
+# Register the tool by including it in the list
+model.act(chat, [create_file], ...)
+```
+
+### Tool Execution Flow
+1. Model receives prompt with tool definitions
+2. Model decides when to use a tool and outputs in a special format
+3. SDK parses this output, calls the appropriate function
+4. SDK captures the return value and feeds it back to the model
+5. Model continues generating with this new information
+
+### Customizing Tool Definitions
+
+For more control over how tools are presented to the model:
+
+```python
+from lmstudio import ToolFunctionDef
+
+tool_def = ToolFunctionDef.from_callable(
+    cryptic_function,
+    name="better_name",
+    description="Clear description of what this tool does"
+)
+
+model.act(chat, [tool_def], ...)
+```
+
+## Working CLI Implementation 
+
+```python
+import lmstudio as lms
+from pathlib import Path
+
+def create_file(name: str, content: str):
+    """Create a file with the given name and content."""
+    dest_path = Path(name)
+    if dest_path.exists():
+        return "Error: File already exists."
+    try:
+        dest_path.write_text(content, encoding="utf-8")
+        return f"File created successfully at {dest_path.absolute()}"
+    except Exception as exc:
+        return f"Error: {exc}"
+
+def print_fragment(fragment, round_index=0):
+    """Print text fragments as they're generated."""
+    print(fragment.content, end="", flush=True)
+
+def main():
+    model = lms.llm()
+    chat = lms.Chat("You are a helpful assistant that can create text files when needed.")
+    
+    print("LM Studio CLI Chat with File Creation Tool (type 'exit' to quit)")
+    
+    while True:
+        user_input = input("You: ")
+        
+        if user_input.lower() in ["exit", "quit"]:
+            break
+        
+        chat.add_user_message(user_input)
+        print("Assistant: ", end="", flush=True)
+        
+        model.act(
+            chat,
+            [create_file],  # Tool registration
+            on_message=chat.append,
+            on_prediction_fragment=print_fragment
+        )
+        
+        print("\n")
+
+if __name__ == "__main__":
+    main()
+```
+
+## Key Points to Remember
+
+1. The model only "knows" about functions passed in the tool list
+2. Callback functions (like `print_fragment`) are for the SDK, not for the model
+3. Good docstrings and type hints are essential for effective tool usage
+4. The model has been trained to recognize and use tools in a specific format
+5. The SDK handles all the complex prompt engineering behind the scenes
