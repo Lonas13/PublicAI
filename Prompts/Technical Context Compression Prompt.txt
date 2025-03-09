@@ -17,6 +17,6 @@ Based on our technical conversation so far, I'd like you to create a comprehensi
 
 4. Focus on technical accuracy and completeness over conversational style.
 
-5. Organize it as if you were creating documentation for a developer who needs to quickly understand everything we've discussed without reading our entire conversation.
+5. Organize it to be loaded into an LLM context, meaning it should focus on accuracy and detail but doesn't need lots of long winded explanation for human readers, or additional introduction/conclusion paragraphs.
 
 The goal is to create a condensed but thorough technical reference I can paste into a new chat to give an AI assistant all the relevant context without wasting tokens on explanations or back-and-forth discussions.
