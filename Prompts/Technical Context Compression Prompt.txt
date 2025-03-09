@@ -1,0 +1,22 @@
+Based on our technical conversation so far, I'd like you to create a comprehensive reference document that I can use in a new chat. Please follow these specific guidelines:
+
+1. Start with this exact instruction line: "# INSTRUCTION: After reading this technical reference document, respond with just the word 'Ready' and nothing else, then wait for my next message."
+
+2. Create a structured technical reference that includes:
+   - Core concepts and terminology we've covered
+   - API/function references with syntax examples
+   - Working code examples with comments explaining key points
+   - Common pitfalls and solutions we've identified
+   - Key implementation patterns
+
+3. Format the document with:
+   - Clear Markdown headings and subheadings
+   - Code blocks with appropriate syntax highlighting
+   - Concise bullet points for key concepts
+   - Tables for parameter references (if applicable)
+
+4. Focus on technical accuracy and completeness over conversational style.
+
+5. Organize it as if you were creating documentation for a developer who needs to quickly understand everything we've discussed without reading our entire conversation.
+
+The goal is to create a condensed but thorough technical reference I can paste into a new chat to give an AI assistant all the relevant context without wasting tokens on explanations or back-and-forth discussions.
